@@ -3,12 +3,14 @@ on:
   pull_request:
     types: [opened, reopened, closed]
 jobs:
-  slack:
+  slack-notifyy:
     runs-on: ubuntu-latest
     steps:
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL  }}
+
+
 
 
