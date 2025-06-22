@@ -6,9 +6,7 @@ jobs:
   slack:
     runs-on: ubuntu-latest
     steps:
-      - name: Enviar mensagem para Slack
+      - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
-        with:
-          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          args: |
-            ${{ github.event.action }}: PR #${{ github.event.number }} - ${{ github.event.pull_request.title }} by ${{ github.actor }}
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
