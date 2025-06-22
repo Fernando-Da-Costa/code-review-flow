@@ -1,0 +1,13 @@
+name: Label PR for Review
+on:
+  pull_request:
+    types: [opened, reopened]
+jobs:
+  add-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Adicionar label needs-review
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: needs-review

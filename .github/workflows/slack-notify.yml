@@ -1,0 +1,14 @@
+name: Notify Slack on PR events
+on:
+  pull_request:
+    types: [opened, reopened, closed]
+jobs:
+  slack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enviar mensagem para Slack
+        uses: rtCamp/action-slack-notify@v2
+        with:
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          args: |
+            ${{ github.event.action }}: PR #${{ github.event.number }} - ${{ github.event.pull_request.title }} by ${{ github.actor }}

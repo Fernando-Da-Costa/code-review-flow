@@ -1,0 +1,6 @@
+# 4. CODEOWNERS
+mkdir -p .github
+cat > .github/CODEOWNERS << 'EOF'
+*       @Fernando-Da-Costa
+frontend/*  @frontend-team
+backend/*   @backend-team
