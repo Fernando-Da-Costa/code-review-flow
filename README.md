@@ -35,4 +35,3 @@ Configure um Project (beta) com colunas e automações:
 - Aprovado ← `approved`
 
 ---
-EOF
