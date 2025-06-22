@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened, reopened, closed]
 jobs:
-  slack-notify:
+  slack-notifyy:
     runs-on: ubuntu-latest
     steps:
       - name: Slack Notification
