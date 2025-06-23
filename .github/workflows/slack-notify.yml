@@ -11,6 +11,3 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_MESSAGE: "${{ github.event.action }}: PR #${{ github.event.number }} - ${{ github.event.pull_request.title }} by ${{ github.actor }}"
-
-
-
