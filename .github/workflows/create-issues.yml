@@ -1,0 +1,14 @@
+name: Criar Issue de Teste
+
+on:
+  workflow_dispatch:
+
+jobs:
+  criar-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Criar Issue via API
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Issue de Teste Automática"
+          content-filepath: .github/ISSUE_TEMPLATE/teste.md
