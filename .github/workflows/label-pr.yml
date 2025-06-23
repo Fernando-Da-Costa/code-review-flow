@@ -9,7 +9,7 @@ jobs:
       - name: Adicionar label "needs-review"
         uses: actions-ecosystem/action-add-labels@v1
         with:
-          github_token: ${{ secrets.MY_PAT }}
+          github-token: ${{ secrets.MY_PAT }}
           labels: needs-review
 
       - name: Adicionar PR ao Project Board
