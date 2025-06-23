@@ -13,7 +13,7 @@ jobs:
           labels: needs-review
 
       - name: Adicionar PR ao Project Board
-        uses: actions/add-to-project@v1
+        uses: actions/add-to-project@v1.0.1
         with:
           project-url: https://github.com/orgs/Fernando-Da-Costa/projects/1
           github-token: ${{ secrets.GITHUB_TOKEN }}
