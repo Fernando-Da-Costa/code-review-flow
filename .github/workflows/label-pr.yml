@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened, reopened]
 jobs:
-  add-label:
+  add-label-and-project:
     runs-on: ubuntu-latest
     steps:
       - name: Adicionar label "needs-review"
@@ -11,3 +11,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: needs-review
+
+      - name: Adicionar PR ao Project Board
+        uses: actions/add-to-project@v1.0.1
+        with:
+          project-url: https://github.com/orgs/Fernando-Da-Costa/projects/1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
