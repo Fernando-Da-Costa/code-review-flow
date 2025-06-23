@@ -3,13 +3,14 @@ on:
   pull_request:
     types: [opened, reopened, closed]
 jobs:
-  slack:
+  slack-notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Slack Notification
+      - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
-        with:
-          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          args: |
-            ${{ github.event.action }}: PR #${{ github.event.number }} - ${{ github.event.pull_request.title }} by ${{ github.actor }}
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_MESSAGE: "${{ github.event.action }}: PR #${{ github.event.number }} - ${{ github.event.pull_request.title }} by ${{ github.actor }}"
+
+
 
