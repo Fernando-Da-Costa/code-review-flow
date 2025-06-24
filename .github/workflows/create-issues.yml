@@ -3,8 +3,6 @@ name: Criar Issue de Teste
 on:
   push:
 
-
-
 jobs:
   Criar-Issue:
     runs-on: ubuntu-latest
@@ -12,20 +10,27 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Listar arquivos do repositório
-        run: ls -R
-
       - name: Criar Issue via API
-        id: create_issue
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: "Issue de Teste Automática"
           content-filepath: .github/ISSUE_TEMPLATE/general_issue.md
           labels: needs-review
 
-      - name: Adicionar Issue ao Project Board
-        uses: alex-page/add-to-project@v1.0.1
-        with:
-          project-url: https://github.com/users/Fernando-Da-Costa/projects/1
-          issue-number: ${{ steps.create_issue.outputs.issue-number }}
-          github-token: ${{ secrets.MY_PAT }}
+      - name: Instalar GitHub CLI
+        run: sudo apt-get update && sudo apt-get install -y gh
+
+      - name: Autenticar no GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Obter URL da última issue criada
+        id: get_issue
+        run: |
+          ISSUE_URL=$(gh issue list --limit 1 --label "needs-review" --state open --json url --jq '.[0].url')
+          echo "url=$ISSUE_URL" >> $GITHUB_OUTPUT
+
+      - name: Adicionar issue ao Project Board
+        run: |
+          gh project item-add --project-id 1 --url "${{ steps.get_issue.outputs.url }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
