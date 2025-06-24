@@ -16,7 +16,7 @@ jobs:
           title: "Issue de Teste Automática"
           content-filepath: .github/ISSUE_TEMPLATE/general_issue.md
           labels: needs-review
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MY_PAT }}
 
       - name: Instalar GitHub CLI
         run: sudo apt-get update && sudo apt-get install -y gh jq
@@ -34,7 +34,7 @@ jobs:
           echo "ISSUE_URL=$ISSUE_URL" >> $GITHUB_ENV
           echo "ISSUE_ID=$ISSUE_ID" >> $GITHUB_ENV
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MY_PAT }}
 
       - name: Listar todos os ProjectsV2 do usuários
         run: |
@@ -50,7 +50,7 @@ jobs:
               }
             }'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MY_PAT }}
 
       - name: Obter ID do ProjectV2
         id: get_project
@@ -68,7 +68,7 @@ jobs:
             }' --jq '.data.user.projectsV2.nodes[] | select(.title == "PR Review Board") | .id')
           echo "id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MY_PAT }}
 
       - name: Adicionar issue ao Project Board via GraphQL
         run: |
@@ -88,7 +88,7 @@ jobs:
             -f projectId="$PROJECT_ID" \
             -f contentId="$ISSUE_ID"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MY_PAT }}
           ISSUE_ID: ${{ env.ISSUE_ID }}
           PROJECT_ID: ${{ env.PROJECT_ID }}
           ISSUE_URL: ${{ env.ISSUE_URL }}
