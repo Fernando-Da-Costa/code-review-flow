@@ -65,7 +65,7 @@ jobs:
                   }
                 }
               }
-            }' --jq '.data.user.projectsV2.nodes[] | select(.title == "a") | .id')
+            }' --jq '.data.user.projectsV2.nodes[] | select(.title == "PR Review Board") | .id')
           echo "id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
