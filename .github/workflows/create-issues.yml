@@ -26,6 +26,8 @@ jobs:
         run: sudo apt-get install gh
 
       - name: Listar Projects V2 do usuário
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh project list --owner Fernando-Da-Costa
 
       - name: Adicionar Issue ao Project
