@@ -21,11 +21,17 @@ jobs:
       - name: Instalar GitHub CLI
         run: sudo apt-get update && sudo apt-get install -y gh
 
+      - name: Aguarda criação da issue
+        run: sleep 5
+
       - name: Obter última issue criada
         id: get_issue
         run: |
-          gh issue list --limit 1 --label "needs-review" --state open --json url,id \
-            --jq '.[0] | "url=\(.url)\nid=\(.id)"' >> $GITHUB_OUTPUT
+          ISSUE=$(gh issue list --limit 1 --label "needs-review" --state open --json url,id --jq '.[0]')
+          ISSUE_URL=$(echo "$ISSUE" | jq -r '.url')
+          ISSUE_ID=$(echo "$ISSUE" | jq -r '.id')
+          echo "url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
+          echo "id=$ISSUE_ID" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,12 +49,14 @@ jobs:
                 }
               }
             }' --jq '.data.viewer.projectsV2.nodes[] | select(.title == "PR Review Board") | .id')
-          echo "id=$PROJECT_ID" >> $GITHUB_OUTPUT
+          echo "id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Adicionar issue ao Project Board via GraphQL
         run: |
+          echo "Adicionando a issue: ${{ steps.get_issue.outputs.url }}"
+          echo "No project ID: ${{ steps.get_project.outputs.id }}"
           gh api graphql -f query='
             mutation($projectId:ID!, $contentId:ID!) {
               addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
