@@ -7,6 +7,9 @@ on:
 jobs:
   Criar-Issue:
     runs-on: ubuntu-latest
+    outputs:
+      ISSUE_URL: ${{ steps.export-vars.outputs.ISSUE_URL }}
+      PROJECT_NAME: ${{ steps.export-vars.outputs.PROJECT_NAME }}
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -81,10 +84,10 @@ jobs:
           ISSUE_URL: ${{ env.ISSUE_URL }}
 
       - name: Exportar variáveis para o próximo job
+        id: export-vars
         run: |
           echo "ISSUE_URL=$ISSUE_URL" >> $GITHUB_OUTPUT
           echo "PROJECT_NAME=$PROJECT_NAME" >> $GITHUB_OUTPUT
-        id: export-vars
 
   Notificar-Slack:
     runs-on: ubuntu-latest
