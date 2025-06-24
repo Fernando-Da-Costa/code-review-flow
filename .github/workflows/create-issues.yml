@@ -16,21 +16,21 @@ jobs:
           title: "Issue de Teste Automática"
           content-filepath: .github/ISSUE_TEMPLATE/general_issue.md
           labels: needs-review
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Instalar GitHub CLI
         run: sudo apt-get update && sudo apt-get install -y gh
-
-      - name: Autenticar no GitHub CLI
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: Obter URL da última issue criada
         id: get_issue
         run: |
           ISSUE_URL=$(gh issue list --limit 1 --label "needs-review" --state open --json url --jq '.[0].url')
           echo "url=$ISSUE_URL" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Adicionar issue ao Project Board
         run: |
-          gh project item-add --project-id 1 --url "${{ steps.get_issue.outputs.url }}"
+          gh project item-add 1 --owner Fernando-Da-Costa --url "${{ steps.get_issue.outputs.url }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
