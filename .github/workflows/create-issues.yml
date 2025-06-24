@@ -76,3 +76,13 @@ jobs:
           ISSUE_ID: ${{ env.ISSUE_ID }}
           PROJECT_ID: ${{ env.PROJECT_ID }}
           ISSUE_URL: ${{ env.ISSUE_URL }}
+
+      - name: Notificar no Slack
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "🚀 Nova issue criada: <${{ env.ISSUE_URL }}|Ver Issue> no projeto *PR Review Board*."
+            }
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
