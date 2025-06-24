@@ -36,7 +36,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Listar todos os ProjectsV2 do usuário
+      - name: Listar todos os ProjectsV2 do usuários
         run: |
           gh api graphql -f query='
             {
