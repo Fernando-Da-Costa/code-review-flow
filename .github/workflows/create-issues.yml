@@ -27,5 +27,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ISSUE_NUMBER=$(gh issue list --state open --label "needs-review" --json number --jq '.[0].number')
-          gh project item-add 1 --content-id $ISSUE_NUMBER --owner Fernando-Da-Costa
+          ISSUE_URL=$(gh issue list --state open --label "needs-review" --json url --jq '.[0].url')
+          gh project item-add 1 --owner Fernando-Da-Costa --url "$ISSUE_URL"
