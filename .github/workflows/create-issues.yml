@@ -39,11 +39,21 @@ jobs:
       - name: Obter ID do ProjectV2
         id: get_project
         run: |
-          PROJECT_ID=$(gh project list --owner Fernando-Da-Costa --format json | jq -r '.[] | select(.title == "PR Review Board") | .id')
-          echo "PROJECT_ID=$PROJECT_ID"
-          echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
+          PROJECT_ID=$(gh api graphql -f query='
+            {
+              user(login: "Fernando-Da-Costa") {
+                projectsV2(first: 10) {
+                  nodes {
+                    id
+                    title
+                  }
+                }
+              }
+            }' --jq '.data.user.projectsV2.nodes[] | select(.title == "PR Review Board") | .id')
+          echo "id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 
       - name: Adicionar issue ao Project Board via GraphQL
