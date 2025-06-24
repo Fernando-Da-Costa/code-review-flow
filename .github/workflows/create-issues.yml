@@ -7,6 +7,12 @@ jobs:
   criar-issue:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Listar arquivos do repositório
+        run: ls -R
+
       - name: Criar Issue via API
         uses: peter-evans/create-issue-from-file@v5
         with:
