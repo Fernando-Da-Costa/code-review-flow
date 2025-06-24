@@ -24,8 +24,8 @@ jobs:
       - name: Obter última issue criada
         id: get_issue
         run: |
-          gh issue list --limit 1 --label "needs-review" --state open --json url,node_id \
-            --jq '.[0] | "url=\(.url)\nnode_id=\(.node_id)"' >> $GITHUB_OUTPUT
+          gh issue list --limit 1 --label "needs-review" --state open --json url,id \
+            --jq '.[0] | "url=\(.url)\nid=\(.id)"' >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -49,9 +49,6 @@ jobs:
 
       - name: Adicionar issue ao Project Board via GraphQL
         run: |
-          echo "Adicionando issue: ${{ steps.get_issue.outputs.url }}"
-          echo "Ao Project ID: ${{ steps.get_project.outputs.id }}"
-
           gh api graphql -f query='
             mutation($projectId:ID!, $contentId:ID!) {
               addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
@@ -61,6 +58,6 @@ jobs:
               }
             }' \
             -f projectId="${{ steps.get_project.outputs.id }}" \
-            -f contentId="${{ steps.get_issue.outputs.node_id }}"
+            -f contentId="${{ steps.get_issue.outputs.id }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
