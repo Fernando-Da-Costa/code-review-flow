@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  criar-issue:
+  Criar-Issue:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
@@ -17,4 +17,4 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: "Issue de Teste Automática"
-          content-filepath: .github/ISSUE_TEMPLATE/a.md
+          content-filepath: .github/ISSUE_TEMPLATE/general-issue.md
