@@ -36,6 +36,22 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Listar todos os ProjectsV2 do usuário
+        run: |
+          gh api graphql -f query='
+            {
+              user(login: "Fernando-Da-Costa") {
+                projectsV2(first: 10) {
+                  nodes {
+                    id
+                    title
+                  }
+                }
+              }
+            }'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Obter ID do ProjectV2
         id: get_project
         run: |
@@ -53,8 +69,6 @@ jobs:
           echo "id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
 
       - name: Adicionar issue ao Project Board via GraphQL
         run: |
