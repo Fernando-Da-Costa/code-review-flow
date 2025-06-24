@@ -3,9 +3,6 @@ name: Criar Issue de Teste
 on:
   push:
 
-permissions:
-  issues: write
-  projects: write
 
 jobs:
   Criar-Issue:
