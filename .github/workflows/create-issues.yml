@@ -3,6 +3,10 @@ name: Criar Issue de Teste
 on:
   push:
 
+permissions:
+  issues: write
+  projects: write
+
 jobs:
   Criar-Issue:
     runs-on: ubuntu-latest
@@ -28,27 +32,10 @@ jobs:
         id: get_issue
         run: |
           ISSUE=$(gh issue list --limit 1 --label "needs-review" --state open --json url,id --jq '.[0]')
-          echo "$ISSUE"
           ISSUE_URL=$(echo "$ISSUE" | jq -r '.url')
           ISSUE_ID=$(echo "$ISSUE" | jq -r '.id')
           echo "ISSUE_URL=$ISSUE_URL" >> $GITHUB_ENV
           echo "ISSUE_ID=$ISSUE_ID" >> $GITHUB_ENV
-        env:
-          GH_TOKEN: ${{ secrets.MY_PAT }}
-
-      - name: Listar todos os ProjectsV2 do usuários
-        run: |
-          gh api graphql -f query='
-            {
-              user(login: "Fernando-Da-Costa") {
-                projectsV2(first: 10) {
-                  nodes {
-                    id
-                    title
-                  }
-                }
-              }
-            }'
         env:
           GH_TOKEN: ${{ secrets.MY_PAT }}
 
