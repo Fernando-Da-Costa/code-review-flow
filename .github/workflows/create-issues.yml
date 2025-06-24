@@ -3,6 +3,10 @@ name: Criar Issue de Teste
 on:
   push:
 
+permissions:
+  issues: write
+  project: write
+
 jobs:
   Criar-Issue:
     runs-on: ubuntu-latest
@@ -25,7 +29,7 @@ jobs:
 
       - name: Adicionar Issue ao Project
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ISSUE_URL=$(gh issue list --state open --label "needs-review" --json url --jq '.[0].url')
           gh project item-add 1 --owner Fernando-Da-Costa --url "$ISSUE_URL"
