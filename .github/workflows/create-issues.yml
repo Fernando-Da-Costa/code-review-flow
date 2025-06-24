@@ -53,10 +53,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
       - name: Adicionar issue ao Project Board via GraphQL
         run: |
-          echo "Adicionando a issue: ${{ steps.get_issue.outputs.url }}"
-          echo "No project ID: ${{ steps.get_project.outputs.id }}"
           gh api graphql -f query='
             mutation($projectId:ID!, $contentId:ID!) {
               addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
