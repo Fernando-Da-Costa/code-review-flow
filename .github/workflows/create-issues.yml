@@ -24,7 +24,7 @@ jobs:
           labels: needs-review
 
       - name: Adicionar Issue ao Project Board
-        uses: titoportas/add-issue-to-project@v1
+        uses: alex-page/add-to-project@v1.0.1
         with:
           project-url: https://github.com/users/Fernando-Da-Costa/projects/1
           issue-number: ${{ steps.create_issue.outputs.issue-number }}
