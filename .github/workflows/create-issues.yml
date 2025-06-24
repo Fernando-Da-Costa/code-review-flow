@@ -19,7 +19,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Instalar GitHub CLI
-        run: sudo apt-get update && sudo apt-get install -y gh
+        run: sudo apt-get update && sudo apt-get install -y gh jq
 
       - name: Aguarda criação da issue
         run: sleep 5
@@ -28,10 +28,11 @@ jobs:
         id: get_issue
         run: |
           ISSUE=$(gh issue list --limit 1 --label "needs-review" --state open --json url,id --jq '.[0]')
+          echo "$ISSUE"
           ISSUE_URL=$(echo "$ISSUE" | jq -r '.url')
           ISSUE_ID=$(echo "$ISSUE" | jq -r '.id')
-          echo "url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
-          echo "id=$ISSUE_ID" >> "$GITHUB_OUTPUT"
+          echo "ISSUE_URL=$ISSUE_URL" >> $GITHUB_ENV
+          echo "ISSUE_ID=$ISSUE_ID" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -49,13 +50,18 @@ jobs:
                 }
               }
             }' --jq '.data.viewer.projectsV2.nodes[] | select(.title == "PR Review Board") | .id')
-          echo "id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
+          echo "PROJECT_ID=$PROJECT_ID"
+          echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
       - name: Adicionar issue ao Project Board via GraphQL
         run: |
+          echo "Adicionando issue $ISSUE_URL ao projeto $PROJECT_ID"
+          if [ -z "$ISSUE_ID" ] || [ -z "$PROJECT_ID" ]; then
+            echo "❌ ERROR: ISSUE_ID ou PROJECT_ID está vazio"
+            exit 1
+          fi
           gh api graphql -f query='
             mutation($projectId:ID!, $contentId:ID!) {
               addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
@@ -64,7 +70,10 @@ jobs:
                 }
               }
             }' \
-            -f projectId="${{ steps.get_project.outputs.id }}" \
-            -f contentId="${{ steps.get_issue.outputs.id }}"
+            -f projectId="$PROJECT_ID" \
+            -f contentId="$ISSUE_ID"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_ID: ${{ env.ISSUE_ID }}
+          PROJECT_ID: ${{ env.PROJECT_ID }}
+          ISSUE_URL: ${{ env.ISSUE_URL }}
