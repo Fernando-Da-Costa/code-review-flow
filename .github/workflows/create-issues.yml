@@ -16,22 +16,16 @@ jobs:
         run: ls -R
 
       - name: Criar Issue via API
+        id: create_issue
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: "Issue de Teste Automática"
           content-filepath: .github/ISSUE_TEMPLATE/general_issue.md
           labels: needs-review
 
-      - name: Instalar GitHub CLI
-        run: sudo apt-get install gh
-
-      - name: Listar Projects V2 do usuário
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh project list --owner Fernando-Da-Costa
-
       - name: Adicionar Issue ao Project Board
         uses: actions/add-to-project@v1.0.1
         with:
           project-url: https://github.com/users/Fernando-Da-Costa/projects/1
           github-token: ${{ secrets.MY_PAT }}
+          content-id: https://github.com/Fernando-Da-Costa/code-review-flow/issues/${{ steps.create_issue.outputs.issue-number }}
