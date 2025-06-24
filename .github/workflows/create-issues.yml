@@ -18,3 +18,14 @@ jobs:
         with:
           title: "Issue de Teste Automática"
           content-filepath: .github/ISSUE_TEMPLATE/general_issue.md
+          labels: needs-review
+
+      - name: Instalar GitHub CLI
+        run: sudo apt-get install gh
+
+      - name: Adicionar Issue ao Project
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER=$(gh issue list --state open --label "needs-review" --json number --jq '.[0].number')
+          gh project item-add <1> --content-id $ISSUE_NUMBER --owner Fernando-Da-Costa

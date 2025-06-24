@@ -1,32 +1,17 @@
-# 📝 Issue de Teste Automática
-
-## Descrição do problema
-<!-- Seja claro e objetivo. Explique o que está acontecendo, incluindo mensagens de erro, se houver. -->
-
-## Passos para reproduzir
-<!-- Liste as etapas detalhadas para reproduzir o problema. -->
-1. 
-2. 
-3. 
-
-## Comportamento esperado
-<!-- Descreva o que você esperava que acontecesse. -->
-
-## Comportamento atual
-<!-- Descreva o que realmente está acontecendo. -->
-
-## Ambiente
-<!-- Informe detalhes relevantes do ambiente: sistema operacional, navegador, versão do sistema, etc. -->
-- SO:
-- Navegador:
-- Versão do sistema:
-
-## Logs e evidências
-<!-- Anexe logs, prints de tela ou outros arquivos que ajudem na análise. -->
-
-## Possível solução (opcional)
-<!-- Se tiver sugestões de correção, descreva aqui. -->
-
+---
+name: "Teste Automático"
+about: "Issue gerada automaticamente por GitHub Actions"
+title: "[Auto] Teste automático"
+labels: [auto, test]
+assignees: ''
 ---
 
-> ⚠️ **Atenção:** Preencha todos os campos obrigatórios para agilizar o atendimento.
+## ✅ Issue de Teste Automático
+
+Essa issue foi criada automaticamente via GitHub Actions usando o arquivo `teste.md`.
+
+### 🔍 Objetivo
+Testar se o fluxo de criação de *Issues* automáticas está funcionando corretamente.
+
+### 📅 Data
+{{ date }}
