@@ -39,7 +39,7 @@ jobs:
       - name: Obter ID do ProjectV2
         id: get_project
         run: |
-          PROJECT_ID=$(gh api graphql -f query='
+          PROJECT_INFO=$(gh api graphql -f query='
             {
               user(login: "Fernando-Da-Costa") {
                 projectsV2(first: 10) {
@@ -49,8 +49,11 @@ jobs:
                   }
                 }
               }
-            }' --jq '.data.user.projectsV2.nodes[] | select(.title == "PR Review Board") | .id')
+            }' --jq '.data.user.projectsV2.nodes[] | select(.title == "PR Review Board")')
+          PROJECT_ID=$(echo "$PROJECT_INFO" | jq -r '.id')
+          PROJECT_NAME=$(echo "$PROJECT_INFO" | jq -r '.title')
           echo "PROJECT_ID=$PROJECT_ID" >> $GITHUB_ENV
+          echo "PROJECT_NAME=$PROJECT_NAME" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.MY_PAT }}
 
@@ -83,6 +86,6 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ISSUES }}
           SLACK_PAYLOAD: |
             {
-              "text": "🚀 Nova issue criada: <${{ env.ISSUE_URL }}|Ver Issue> no projeto *PR Review Board*."
+              "text": "🚀 Nova issue criada: <${{ env.ISSUE_URL }}|Ver Issue> no projeto *${{ env.PROJECT_NAME }}*."
             }
 
