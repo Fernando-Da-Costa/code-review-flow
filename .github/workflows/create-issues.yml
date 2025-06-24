@@ -5,7 +5,7 @@ on:
 
 permissions:
   issues: write
-  project: write
+  projects: write
 
 jobs:
   Criar-Issue:
