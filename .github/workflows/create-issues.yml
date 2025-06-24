@@ -86,6 +86,6 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ISSUES }}
           SLACK_PAYLOAD: |
             {
-              "text": "🚀 Nova issue criada: <${{ env.ISSUE_URL }}|Ver Issue> no projeto *${{ env.PROJECT_NAME }}*."
+              "text": "*Projeto:* `${{ env.PROJECT_NAME }}`\n*Branch:* `${{ github.ref_name }}`\n🚀 Nova issue criada: <${{ env.ISSUE_URL }}|Ver Issue>"
             }
 
