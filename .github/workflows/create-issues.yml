@@ -21,16 +21,46 @@ jobs:
       - name: Instalar GitHub CLI
         run: sudo apt-get update && sudo apt-get install -y gh
 
-      - name: Obter URL da última issue criada
+      - name: Obter última issue criada
         id: get_issue
         run: |
-          ISSUE_URL=$(gh issue list --limit 1 --label "needs-review" --state open --json url --jq '.[0].url')
-          echo "url=$ISSUE_URL" >> $GITHUB_OUTPUT
+          gh issue list --limit 1 --label "needs-review" --state open --json url,node_id \
+            --jq '.[0] | "url=\(.url)\nnode_id=\(.node_id)"' >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Adicionar issue ao Project Board
+      - name: Obter ID do ProjectV2
+        id: get_project
         run: |
-          gh project item-add 2 --owner @me --url "${{ steps.get_issue.outputs.url }}"
+          PROJECT_ID=$(gh api graphql -f query='
+            {
+              viewer {
+                projectsV2(first: 10) {
+                  nodes {
+                    id
+                    title
+                  }
+                }
+              }
+            }' --jq '.data.viewer.projectsV2.nodes[] | select(.title == "PR Review Board") | .id')
+          echo "id=$PROJECT_ID" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Adicionar issue ao Project Board via GraphQL
+        run: |
+          echo "Adicionando issue: ${{ steps.get_issue.outputs.url }}"
+          echo "Ao Project ID: ${{ steps.get_project.outputs.id }}"
+
+          gh api graphql -f query='
+            mutation($projectId:ID!, $contentId:ID!) {
+              addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+                item {
+                  id
+                }
+              }
+            }' \
+            -f projectId="${{ steps.get_project.outputs.id }}" \
+            -f contentId="${{ steps.get_issue.outputs.node_id }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
