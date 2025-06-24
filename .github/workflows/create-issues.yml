@@ -31,6 +31,6 @@ jobs:
 
       - name: Adicionar issue ao Project Board
         run: |
-          gh project item-add 1 --owner Fernando-Da-Costa --url "${{ steps.get_issue.outputs.url }}"
+          gh project item-add 2 --owner Fernando-Da-Costa --url "${{ steps.get_issue.outputs.url }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
