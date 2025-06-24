@@ -65,7 +65,7 @@ jobs:
                   }
                 }
               }
-            }' --jq '.data.user.projectsV2.nodes[] | select(.title == "@Fernando-Da-Costa's a") | .id')
+            }' --jq '.data.user.projectsV2.nodes[] | select(.title == "a") | .id')
           echo "id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,7 +74,7 @@ jobs:
         run: |
           echo "Adicionando issue $ISSUE_URL ao projeto $PROJECT_ID"
           if [ -z "$ISSUE_ID" ] || [ -z "$PROJECT_ID" ]; then
-            echo "❌ ERROR: ISSUE_ID ou PROJECT_ID está vaziooo"
+            echo "❌ ERROR: ISSUE_ID ou PROJECT_ID está vazio"
             exit 1
           fi
           gh api graphql -f query='
