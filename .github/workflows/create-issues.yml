@@ -81,11 +81,12 @@ jobs:
           ISSUE_URL: ${{ env.ISSUE_URL }}
 
       - name: Notificar no Slack
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_ISSUES }}
-          SLACK_PAYLOAD: |
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
             {
               "text": "*Projeto:* `${{ env.PROJECT_NAME }}`\n*Branch:* `${{ github.ref_name }}`\n🚀 Nova issue criada: <${{ env.ISSUE_URL }}|Ver Issue>"
             }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_ISSUES }}
 
