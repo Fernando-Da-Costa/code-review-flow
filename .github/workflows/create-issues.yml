@@ -80,12 +80,22 @@ jobs:
           PROJECT_ID: ${{ env.PROJECT_ID }}
           ISSUE_URL: ${{ env.ISSUE_URL }}
 
+      - name: Exportar variáveis para o próximo job
+        run: |
+          echo "ISSUE_URL=$ISSUE_URL" >> $GITHUB_OUTPUT
+          echo "PROJECT_NAME=$PROJECT_NAME" >> $GITHUB_OUTPUT
+        id: export-vars
+
+  Notificar-Slack:
+    runs-on: ubuntu-latest
+    needs: Criar-Issue
+    steps:
       - name: Notificar no Slack
         uses: slackapi/slack-github-action@v1.25.0
         with:
           payload: |
             {
-              "text": "*Projeto:* `${{ env.PROJECT_NAME }}`\n*Branch:* `${{ github.ref_name }}`\n🚀 Nova issue criada: <${{ env.ISSUE_URL }}|Ver Issue>"
+              "text": "*Projeto:* `${{ needs.Criar-Issue.outputs.PROJECT_NAME }}`\n🚀 Nova issue criada: <${{ needs.Criar-Issue.outputs.ISSUE_URL }}|Ver Issue>"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_ISSUES }}
